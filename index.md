@@ -1,3 +1,6 @@
+# Java
+[类成员执行顺序](java/class_member_execution_order.md)
+
 # Android
 [Activity](activity.md)
 
