@@ -45,6 +45,13 @@ val s1 = "a is $a"	// use $ to refer to corresponding variable
 a = 2
 val s2 = "${s1.replace("is", "was")}, but now is $a." // can use expressions or operations inside ${}
 ```
+
+show raw `$`:
+```
+val money = 5
+println("price is ${'$'}${money}")
+```
+
 ### Nullable values
 A reference must be explicitly marked as nullable when null value is possible:
 ```
@@ -72,4 +79,93 @@ fun getStringLength(obj: Any): Int? {
 	}
 	return null
 }
+```
+### for loop
+```
+val items = listOf("apple", "banana", "kiwi")
+for (item in items) { // iterate item
+	println(item)
+}
+
+for (index in items.indices) { // iterate index
+	println("item at $index is ${items[index]}")
+}
+```
+### when expression
+```
+fun describe(obj: Any): String = 
+	when (obj) {
+		1		-> "One"
+		"Hello"		-> "Greeting"
+		is Long		-> "Long"
+		!is String	-> "Not a string"
+		else		-> "Unknown"
+	}
+
+fun main(args: ArrayList<String>) {
+	println(describe(1))
+	println(describe("Hello"))
+	println(describe(1000L))
+	println(describe(2))
+	println(describe("other"))
+}
+```
+### ranges
+```
+val x = 10
+val y = 9
+if (x in 1..y+1) {
+	println("$x fits in range of 1 to ${y + 1}")
+}
+
+
+val list = listOf("a", "b", "c")
+if (list.size !in list.indices) { // !in mean not including
+	println("list size is out of valid list indices range")
+}
+```
+
+iterating over a range:
+```
+for ( x in 1..5) {
+	print(x)
+}
+```
+or over a progression:
+```
+for (x in 1..10 step 2) {
+	print(x)
+}
+for (x in 9 downTo 0 step 3) {
+	print(x)
+}
+```
+### Collections
+iterating over a collection:
+```
+val items = listOf("apple", "banana", "kiwi")
+for (item in items) {
+	println(item)
+}
+```
+checking if a collection contains an object:
+```
+when {
+	"orange" in items -> println("juicy")
+	"apple" in items -> println("apple is fine too")
+}
+```
+using lambda expressions to filter and map collections:
+```
+val fruits = listOf("banana", "avocado", "apple", "kiwi")
+fruits
+ .filter { it.startsWith("a")}
+ .sortedBy { it }
+ .map { it.toUpperCase() }
+ .forEach { println(it) }
+// outputs APPLE AVOCADO
+```
+### Creating instances
+```
+var rectangle = Rectangle(5.0, 2.0) // no `new` keyword required
 ```
