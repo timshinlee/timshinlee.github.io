@@ -4,6 +4,8 @@
 # Android
 [Activity](android/ctivity.md)
 
+[Data Storage](android/data_storage.md)
+
 # Kotlin
 [Basics](kotlin/basic.md)
 
