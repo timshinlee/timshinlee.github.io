@@ -25,4 +25,4 @@
 # 开发工具
 [git](tools/git.md)
 
-[test](test.html)
+[test](main.html)
