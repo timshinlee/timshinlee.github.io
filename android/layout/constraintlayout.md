@@ -64,9 +64,13 @@ Guideline主要用于相对于父容器固定位置的情况下，比如相对�
 可以通过`app:layout_constraintDimensionRatio`属性来设置某个子控件的宽高比，注意此时可变边要设为`match_constraint`，表示满足约束条件的情况下充满布局，这样才能保持宽高比进行变动。
 ```
 android:layout_constraintDimensionRatio="2:1" // 表示宽高比为2:1，默认朝向为水平朝向
-android:layout_constraintDimensionRatio="h,2:1" // 表示朝向为竖直朝向，此时宽高比变为1:2
+android:layout_constraintDimensionRatio="h,2:1" // 表示朝向为竖直朝向，此时宽高比是1:2
 ```
-# Barriers
+# Barriers(v1.1 added)
+barrier与guideline同样都是用来作为参照物约束控件的，不同的是barrier的位置是基于多个view来决定的。
+
+Barrier的添加同样是通过右键-Helpers-add barrier来添加，可以通过设置`app:barrierDirection`来决定这个barrier是放到控件组的哪个位置，然后通过`app:constraint_referenced_ids`属性来设置控件组包含的控件。在视图编辑器当中可以通过拖动的形式快速添加控件：
+![barrier_references](https://constraintlayout.com/assets/images/basics/barrier_references.gif)
 
 
 ### References
