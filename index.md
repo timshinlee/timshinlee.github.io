@@ -8,6 +8,7 @@
 
 [Data Storage](android/data_storage.md)
 
+[tips](android/tips.md)
 # Kotlin
 [Basics](kotlin/basic.md)
 
