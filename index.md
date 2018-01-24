@@ -12,6 +12,10 @@
 [ConstraintLayout](android/layout/constraintlayout.md)
 
 [tips](android/tips.md)
+
+# RxJava
+[Introduction to functional reactive programming](http://blog.danlew.net/2017/07/27/an-introduction-to-functional-reactive-programming/)
+
 # Kotlin
 [Basics](kotlin/basic.md)
 

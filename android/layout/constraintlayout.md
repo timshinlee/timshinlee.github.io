@@ -198,3 +198,8 @@ Placeholder默认是不可见的，可以通过`setEmptyVisibility()`来设置�
 
 ### References
 > [constraintlayout.com](https://constraintlayout.com)
+> [ConstraintLayout | Android Developers](https://developer.android.google.cn/reference/android/support/constraint/ConstraintLayout.html)
+> [Build a Responsive UI with ConstraintLayout](https://developer.android.google.cn/training/constraint-layout/index.html)
+> [Understanding the performance benefits of ConstraintLayout](https://android-developers.googleblog.com/2017/08/understanding-performance-benefits-of.html)
+> [Building interfaces with ConstraintLayout](https://medium.com/google-developers/building-interfaces-with-constraintlayout-3958fa38a9f7)
+> [ConstraintLayout CodeLab](https://codelabs.developers.google.com/codelabs/constraint-layout/#0)
