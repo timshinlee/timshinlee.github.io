@@ -14,7 +14,7 @@
 [tips](android/tips.md)
 
 # RxJava
-[Introduction to functional reactive programming](rxjava/function_reactive_programming.md)
+[Introduction to functional reactive programming](rxjava/functional_reactive_programming.md)
 
 # Kotlin
 [Basics](kotlin/basic.md)
