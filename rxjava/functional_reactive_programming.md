@@ -105,7 +105,7 @@ public static List<Integer> doubleValues(List<Integer> input) {
 因为高阶函数是基于pure function的，而pure function具有不受外界因素影响，也不影响外界的特点，所以如果`A -> B`，以及`B -> C`，那么就可以推出`A -> C`。
 
 # Functional Reactive Programming
-
+FRP就是在Functional programming的基础上加上异步的特性。
 
 # References
 > [Introction to functional reactive programming](http://blog.danlew.net/2017/07/27/an-introduction-to-functional-reactive-programming/)

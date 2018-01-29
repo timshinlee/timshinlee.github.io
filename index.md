@@ -8,6 +8,7 @@
 
 [Data Storage](android/data_storage.md)
 
+[Resources](android/resouces/index.md)
 ## Layout
 [ConstraintLayout](android/layout/constraintlayout.md)
 
