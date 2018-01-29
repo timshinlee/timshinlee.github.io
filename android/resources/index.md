@@ -1,1 +1,1 @@
-![String](string.md)
+[String](string.md)
