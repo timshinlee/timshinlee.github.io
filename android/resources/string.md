@@ -21,4 +21,4 @@
 ```
 
 # References
-> https://android.jlelse.eu/android-strings-xml-tips-tricks-52b0c820cf7a
+> [Android Strings XML Tips & Tricks](https://android.jlelse.eu/android-strings-xml-tips-tricks-52b0c820cf7a)
