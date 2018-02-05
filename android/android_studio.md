@@ -44,11 +44,6 @@ android {
 
 - tools:locale——用于`<resources>`标签，用来指明说所包含资源的语言环境，避免拼写检查器的报错
 
-```xml
-<resources xmlns:tools="http://schemas.android.com/tools"
-    tools:locale="es">
-```
-
 ## 设计时属性
 
 - tools:任意android命名空间属性
