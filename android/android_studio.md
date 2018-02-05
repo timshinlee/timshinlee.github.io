@@ -143,4 +143,44 @@ android {
 
 > [Tools Attributes Reference](https://developer.android.google.cn/studio/write/tool-attributes.html)
 
+# 构建过程
 
+1. 编译器把源码转为DEX文件（Dalvik Executable），然后把资源转为编译资源
+2. APK管理器把DEX文件和编译资源整合成单个APK
+3. 使用debug或者release keystore进行签名
+4. zipalign
+
+# 构建参数
+1. Build Types：定义了构建和打包过程中Gradle使用的参数，例如debug和release。
+2. Product Flavors：app不同的版本，例如免费版和收费版，不同的版本可以使用不同的代码和资源，也可以共用这些部分。
+3. Build Variants：Build Variants是build type和product flavor的组合，也是Gradle实际上用来构建app的配置。
+4. Manifest Entries：可以在build variant配置当中指定一些属性，这些属性用来覆盖manifest文件中的属性。
+5. Dependencies
+6. Signing：可以通过配置签名属性，来自动签名。debug版本会自动签名debug的key，release版本需要手动指定配置参数。
+7. ProGuard：可以为每一种build variant指定一种ProGuard规则。
+8. Multiple APK Support：可以为不同的屏幕密度或者ABI（Application Binary Interface）构建不同的apk。
+
+# 配置Gradle
+## build.gradle全局变量配置
+Project的build.gradle中
+```groovy
+buildscript {...} // 配置gradle
+allprojects {...} // 配置所有项目
+ext {             // 配置公共属性，虽说可以配置在module级别，但是会导致无法单独编译
+    compileSdkVersion = 26
+    supportLibVersion = "27.0.2"
+    otherProperty = "123"
+}
+```
+module中的build.gradle进行引用
+```groovy
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion // 使用rootProject.ext.property_name进行引用
+    ...
+}
+
+denpendencies {
+    compile "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+    compile "com.android.support:appcompat-v7:$rootProject.ext.supportLibVersion" // 两种都可以，注意使用双引号
+}
+```
