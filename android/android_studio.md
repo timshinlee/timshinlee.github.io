@@ -43,6 +43,7 @@ android {
 - tools:targetApi——使用在Lint上面，用来当minSdkVersion没有达到该控件或其子控件api要求时忽略警告。
 
 - tools:locale——用于`<resources>`标签，用来指明说所包含资源的语言环境，避免拼写检查器的报错
+
 ```xml
 <resources xmlns:tools="http://schemas.android.com/tools"
     tools:locale="es">
