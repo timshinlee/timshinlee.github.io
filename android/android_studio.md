@@ -44,7 +44,7 @@ android {
 
 - tools:locale——用于`<resources>`标签，用来指明说所包含资源的语言环境，避免拼写检查器的报错
 
-```
+```xml
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     tools:locale="es">
 </resources>
@@ -183,5 +183,91 @@ android {
 denpendencies {
     compile "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     compile "com.android.support:appcompat-v7:$rootProject.ext.supportLibVersion" // 两种都可以，注意使用双引号
+}
+```
+## variant-aware dependency management
+Gradle的Android插件3.0提供一个新的依赖库管理机制，也就是app的build variant会对应使用依赖库中相同variant。例如app的debug版将会使用库的debug版，在flavor上也是一样的，app的freeDebug版将会使用库的freeDebug版。
+
+为了让插件能自动匹配variant成功，首先要对所有的flavor进行声明，声明到一个dimension当中。其次要对variant不匹配的情况进行处理。
+
+### 声明dimension
+```groovy
+// 声明dimension
+flavorDimensions "tier", "minApi"
+
+// 每种flavor都需要声明所属的dimension
+productFlavors {
+    free {
+        dimension "tier"
+	...
+    }
+    paid {
+        dimension "tier"
+	...
+    }
+    minApi23 {
+        dimension "minApi"
+	...
+    }
+
+    minApi18 {
+        dimension "minApi"
+    }
+}
+```
+### 处理variant不匹配情况
+当app的variant和依赖库的variant无法相互匹配的时候，就会报错，此时需要根据实际情况进行处理：
+
+- app包含依赖库所没有的build type时，使用matchingFallbacks
+```
+// app's build.gradle
+android {
+    buildTypes {
+        debug {}
+	release {}
+	staging {
+	    // 列出未匹配到时，要从依赖库中使用的build type，使用匹配到的第一个
+            matchingFallbacks = ['debug', 'qa', 'release']
+	}
+    }
+}
+```
+- app和依赖库都包含同名dimension，但是app的dimension当中包含依赖库不具有的flavor，同样使用matchingFallbacks
+
+```
+// app's build.gradle
+android {
+    defaultConfig {}
+    flavorDimensions "tier"
+    productFlavors {
+        paid {
+            dimension "tier"
+	    // 已有匹配，不必列出fallback
+	}
+	free {
+            dimension "tier"
+	    // 列出未匹配时的备选
+	    matchingFallbacks = ['demo', 'trial']
+	}
+    }
+}
+```
+
+- 依赖库包含app没有的dimension，则在defaultConfig处使用missionDimensionStrategy，或在具体flavor指定strategy
+
+```
+android {
+    defaultConfig {
+        missingDimensionStrategy 'minApi', 'minApi18', 'minApi23'
+	missingDimensionStrategy 'abi', 'x86', 'arm64'
+    }
+    flavorDimensions "tier"
+    productFlavors {
+        free {
+            dimension 'tier'
+	    missingDimensionStrategy 'minApi', 'minApi23', 'minApi18'
+	}
+	paid {}
+    }
 }
 ```
