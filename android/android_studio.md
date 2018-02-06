@@ -192,7 +192,7 @@ Gradle的Android插件3.0提供一个新的依赖库管理机制，也就是app�
 
 ### 声明dimension
 ```groovy
-// 声明dimension
+// 声明dimension，优先级由高到低，不同的dimension就可以组合生成不同的variant，例如freeminApi23。
 flavorDimensions "tier", "minApi"
 
 // 每种flavor都需要声明所属的dimension
@@ -268,6 +268,119 @@ android {
 	    missingDimensionStrategy 'minApi', 'minApi23', 'minApi18'
 	}
 	paid {}
+    }
+}
+```
+
+### 本地库的依赖
+```
+dependencies {
+    implementation project(':library') // 本地库依赖不能在前面加build variant，variant-aware会自动识别
+
+    debugImplementation 'com.example.android:app-magic:12.3' // 外部依赖仍然可以指定variant，但是这种方式不推荐
+}
+```
+### 新的依赖关键字
+
+- implementation：该依赖在编译时对其他模块不可见，只在运行时对其他模块可见。一般使用该关键字，因为所依赖的库改变时，只会重新编译该库及直接依赖该库的模块，大大减少构建时间。
+- api：这个依赖对于其他模块在编译时也可见，如果该依赖改变的话，所有编译时可以使用到依赖库的模块都会进行编译，所以一般是用在把依赖库分享给分开的测试模块上的情况中。
+- compileOnly：Gradle把这个依赖添加到编译路径，但是不会添加到构建输出当中。所以要注意代码中需要检测这个依赖是否可用。可以减少apk大小。
+- runtimeOnly：Gradle只把这个依赖添加到构建输出apk当中，不会添加到编译路径。
+
+### 发布依赖
+- 变体名称ApiElements
+- 变体名称RuntimeElements
+
+< [Migrate to Plugin 3.0.0](https://developer.android.google.cn/studio/build/gradle-plugin-3-0-0-migration.html)
+
+## 应用id
+applicationId虽然和包名一样命名风格，默认完全一样，但是应用id和包名其实是独立的，可以单独修改包名，对于应用id没有影响。
+
+相对于包名来说，应用id的命名规则更严格：
+- 至少有两部分组成，由句号分隔
+- 每个部分必须使用字母开头
+- 所有字符必须是[a-zA-Z0-9_]
+
+因为应用id一般与包名一致，所以一些Android API中指的packageName其实是应用id，例如`Context.getPackageName()`。
+
+### 根据build variant修改应用id
+可以覆盖声明applicationId，或者使用suffix加在默认id的后面。
+```
+android {
+    defaultConfig {
+        applicationId "com.example.myapp"
+    }
+
+    productFlavors {
+        free {
+	    applicationIdSuffix ".free"
+	}
+	pro {
+	    applicationIdSuffix ".pro"
+        }
+    }
+
+    buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+	}
+    }
+}
+```
+
+不同的应用id就代表不同的应用，可以安装在同一个设备上。如果是想要对同一个应用进行不同设备配置的区分，则应用id必须一致，只是要区分versionCode。
+
+如果build.gradle当中没有声明applicationId，则会使用AndroidManifest当中的报名座位applicationId，此时修改包名也会修改应用id。
+
+如果要在Manifest文件中引用gradle中定义的applicationId，可以使用`${applicationId}`进行引用。
+
+### 包名修改注意事项
+实际项目目录结构必须和Manifest文件中定义的包名一致
+
+```xml
+<manifest xmlns:android="http://schemas.android.com/apk/android"
+    package="com.example.myapp"
+    android:versionCode="1"
+    android:versionName="1.0">
+```
+
+Manifest中的包名用来给R.java作为命名空间，例如`com.example.myapp.R'，还有给Manifest文件中的类作为命名空间，例如`<activity android:name=".MainActivity">`。
+
+当gradle中定义的applicationId和Manifest中的包名不一致时，首先会使用包名去作为R.java和Manifest的命名空间，然后就使用applicationId去替换包名，最后应用商店和手机识别到的是applicationId。
+
+> [Set the Application ID](https://developer.android.google.cn/studio/build/application-id.html)
+
+## 依赖语法
+```
+apply plugin: 'com.android.application'
+
+androd {...}
+dependencies {
+    implementation project(":mylibrary") // 依赖本地library
+    implementation fileTree(dir: 'libs', include: ['*.jar']) // 依赖本地目录所有jar包
+    implementation files('libs/foo.jar', 'libs/bar.jar') // 依赖本地某些jar包
+    implementation 'com.example.android:app-magic:12.3" // 依赖远程库
+    implementation group: 'com.example.android', name: 'app-magic', version: '12.3' // 依赖远程库完整写法
+}
+```
+
+## 优化构建速度
+- 为开发时设置不同的配置提高编译速度
+```
+android {
+    ...
+    defaultConfig {...}
+    productFlavors {
+        dev {
+            minSdkVersion 21 // 设置为21是为了从命令行构建应用的时候，不会使用到legacy multidex，AS2.3以上不用设置会自动避免使用
+	    versionNameSuffix "-dev"
+	    applicationIdSuffix '.dev'
+	    resConfigs "en", "xxhdpi" // 限制要使用的资源类型，提高编译速度
+	}
+
+	prod {
+            // 如果在defaultConfig中配置了发布时的配置，质变可以留空，但是仍然要创建这个flavor否则所有的variant都会使用dev flavor。
+	}
     }
 }
 ```
