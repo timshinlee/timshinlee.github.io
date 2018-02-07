@@ -16,6 +16,10 @@
 
 [tips](android/tips.md)
 
+## General
+
+[publishing apps](android/general/publishing_apps.md)
+
 # RxJava
 [Introduction to functional reactive programming](rxjava/functional_reactive_programming.md)
 
