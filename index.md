@@ -1,7 +1,9 @@
 # Java
+---
 [类成员执行顺序](java/class_member_execution_order.md)
 
 # Android
+---
 [Activity](android/ctivity.md)
 
 [Tasks and back stack](android/tasks_and_back_stack.md)
@@ -15,6 +17,9 @@
 [ConstraintLayout](android/layout/constraintlayout.md)
 
 [tips](android/tips.md)
+
+## Architecture Component
+[basics](android/architecture_component/basics.md)
 
 ## General
 
