@@ -96,6 +96,7 @@ Animator新增`pause()`和`resume()`及相应监听。
 - 支持OpenGL ES 3.1
 - 全新camera2 API
 - app支持屏幕截图
+- 弃用org.apache.http和android.net.http.ANdroidHttpClient，应该使用URLConnection类。
 
 ## 通知
 - 使用`setColor()`设置app通知icon背后圆圈的重色（accent color）
@@ -149,3 +150,31 @@ CameraCharacteristics类可以检测当前摄像头支持的特性，其中INFO_
 如果自定义的DocumentsProvider需要支持子树选择，实现`isChildDocument()`并在COLUMN_FLAGS中包含FLAG_SUPPORTS_IS_CHILD。
 
 5.0也在共享存储上引入了一个新的与包绑定的目录，app可以把媒体文件放这个目录中，就会自动包含到MediaStore当中。使用`getExternalMediaDirs()`来获取这个目录，跟`getExternalFilesDir()`获取应用外部私有文件一样，这个操作不需要权限。平台会自动扫描external media dirs的目录来更新媒体库。当然我们也可以手动调用MediaScannerConnection来扫描文件。
+
+## 多网络连接
+5.0允许应用动态搜索可用网络并连接，可以用在app需要特定网络的场景下。
+
+## 低功耗蓝牙 Bluetooth Low Energy
+5.0支持把Android设备作为BLE的外部设备，就是其他蓝牙设备可以搜索到这个设备。允许Android设备可以广播或者搜索回复并与其他蓝牙设备建立连接。
+
+## NFC提升
+
+## JobScheduler
+JobScheduler可以用来安排任务，例如在设备充电、连接到特定网络、设备闲置、在限期前完成等特殊场景。
+
+## 屏幕固定
+屏幕固定模式：
+
+- 状态栏为空，通知和状态信息都被隐藏起来
+- Home键和Recent Apps键被隐藏
+- 其他app无法启动新activity
+- 当前app可以打开新activity，只要没有创建新task
+- 当一个device owner app开启屏幕固定时，只能由app调用`stopLockTask()`来解除固定
+- 当其他非owner app开启屏幕固定时，用户可以按按照提示退出固定模式。
+
+进入固定模式：调用`startLockTask()`。
+
+## IME（Input Method Editors）
+5.0开始可以调用`shouldOfferSwitchingToNextInputMethod()`来设置是否支持通过点击输入法的地球图标切换到下一个输入法。
+
+同时还会检测下一个输入法是否支持切换，不会切换到不支持切换的输入法。
