@@ -25,6 +25,8 @@
 
 [publishing apps](android/general/publishing_apps.md)
 
+[versions](android/general/versions.md)
+
 # RxJava
 [Introduction to functional reactive programming](rxjava/functional_reactive_programming.md)
 
