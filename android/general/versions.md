@@ -174,7 +174,188 @@ JobScheduler可以用来安排任务，例如在设备充电、连接到特定�
 
 进入固定模式：调用`startLockTask()`。
 
-## IME（Input Method Editors）
+## IME（Input Method Editor）
 5.0开始可以调用`shouldOfferSwitchingToNextInputMethod()`来设置是否支持通过点击输入法的地球图标切换到下一个输入法。
 
 同时还会检测下一个输入法是否支持切换，不会切换到不支持切换的输入法。
+
+# Android 6.0 Marshmallow (API 23)
+
+## Adoptable Storage Devices
+用户可以采用外部存储设备，例如SD卡。采用外存设备会加密并格式化这个设备，作为内部存储使用。这样子用户就可以在存储设备间移动app和私人数据。移动app的时候，系统会优先考虑Manifest中的`android:installLocation`设置。
+
+因为app可以在存储设备间移动，所以文件路径可能会动态改变，因此建议实时调用路径API，而不是保存固有路径。
+
+路径API包括：
+
+- Context：
+  - getFilesDir()
+  - getCacheDir()
+  - getCodeCacheDir()
+  - getDatabasePath()
+  - getDir()
+  - getNoBackupFilesDir()
+  - getFileStreamPath()
+  - getPackageCodePath()
+  - getPackageResourcePath()
+- ApplicationInfo:
+  - dataDir 
+  - sourceDir
+  - nativeLibraryDir
+  - publicSourceDir
+  - splitSourceDirs
+  - splitPublicSourceDirs
+
+## 通知
+- 新的INTERRUPTION_FILTER_ALARMS级别，勿扰模式仅允许闹钟
+- 新的CATEGORY_REMINDER用来作为用户安排的提醒事项标准，区别于其他事件CATEGORY_EVENT和闹钟CATEGORY_ALARM
+- 新的Icon类用来绑定到通知，通过`setSmallIcon()`和`setLargeIcon()`来调用。`addAction()`改为接收一个Icon对象。
+- 新的`getActiveNotifications()`方法判断当前是否有本应用中还存活的通知。
+
+## Camera
+`setTorchMode()`在不开启摄像头的情况下开启闪光灯。
+
+访问Camera资源，例如开启和设置摄像头，优先给高优先级应用使用，例如用户可见或者前台程序。低优先级的应用可能会被让出摄像头给高优先级应用，在弃用的Camera上是`onError()`，在Camera2上是`onDisconnected()`。
+
+## 运行时权限管理
+## Doze模式和应用待机
+- Doze：设备静止未充电且屏幕关闭一段时间后，设备进入Doze模式，设备定时继续一些正常操作。
+- App Standby：用户一段时间没有接触某个app后，这个app就进入待机模式。当设备未充电时，系统会关闭待机应用的网络和同步、工作等。
+
+## 移除Apache HTTP库
+应该使用HttpURLConnection类。要继续使用Apache HTTP API，需要声明依赖
+```
+android {
+    useLibrary 'org.apache.http.legacy'
+}
+```
+## 通知
+要重复更新一个通知的话，复用Notification.Builder实例，调用build()方法来获取更新的Notification实例。
+
+## 文本选择
+1. 首先创建ActionMode.Callback2对象
+```java
+    private ActionMode.Callback2 mActionModeCallback = new ActionMode.Callback2() {
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            final MenuInflater menuInflater = mode.getMenuInflater();
+            menuInflater.inflate(R.menu.main,menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.menu_action1:
+                    Toast.makeText(ChronoActivity1.this, "action1", Toast.LENGTH_SHORT).show();
+                    mode.finish();
+                    return true;
+                default:
+                    break;
+            }
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            mActionMode = null;
+        }
+
+        @Override
+        public void onGetContentRect(ActionMode mode, View view, Rect outRect) {
+            super.onGetContentRect(mode, view, outRect);
+        }
+    };
+```
+2. 然后在长按点击事件里调用`startActionMode()`获取漂浮类型的ActionMode（API23）
+```java
+        helloText.setOnLongClickListener(new View.OnLongClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public boolean onLongClick(View v) {
+                if (mActionMode != null) {
+                    return false;
+                }
+                mActionMode = startActionMode(mActionModeCallback,ActionMode.TYPE_FLOATING);
+                v.setSelected(true);
+                return true;
+            }
+        });
+```
+3. 重写`onGetContentRect()`方法设置内容矩形的坐标
+4. 如果矩形定位不合法，而且这是需要invalidate的唯一view，则调用`invalidateContentRect()`。
+
+
+# Android 7.0 Nougat （API 25）
+## 多窗口支持
+## 通知升级
+
+- 模板升级：强调新的主图片和头像。
+- 消息格式定制更多样化
+- 通知分组：可以把通知按照标题等进行分组展示
+- 直接回复：在通知界面直接回复短信和信息
+- 在通知中使用自定义视图
+## Doze模式升级
+7.0中，即使设备在移动，只要屏幕关闭一段时间而且未充电，就会进入Doze模式。
+
+## SurfaceView
+7.0中SurfaceView在一些情况下耗电表现比TextureView更好，因此从7.0开始建议使用SurfaceView。
+
+## 节省数据模式
+设置中可以开启数据节省模式Data saver，ConnectivityManager现在可以获取用户的数据节省模式设置并检测变化。
+
+## Vulkan
+7.0整合了Vulkan，这是一个3D渲染API。
+
+## 通知栏快速设置API
+新API可以让应用在通知栏快速启动栏中定义按钮。
+
+## 号码拦截
+## 同时支持多语言
+## 新的emoji
+## WebView
+从7.0上的51版本Chrome开始，直接设备上的Chrome应用来渲染Android的WebView。可以在开发者选项中修改。
+## 直接启动
+Direct boot加快了设备启动时间，并且让一些注册的应用在重启后仍然发挥有限的功能，例如闹钟、信息、来电等。
+
+启动后，系统处于限制模式，只能访问设备加密数据，无法访问应用或其他数据。如果有想要在这个模式下运行的应用，则需要在清单中声明一个标志，如此一来这个应用会在重启后被激活，通过发送广播LOCKED_BOOT_COMPLETED，这样这个应用的数据在用户解锁前是可以访问的。其他未注册的数据直到用户解锁才能访问到。
+
+## APK Signature Scheme v2
+7.0引入了APK Signature Scheme v2，安装应用速度更快，安全性也更高。如果要关闭，可以在module的build.gradle当中
+```groovy
+android {
+    ...
+    defaultCOnfig {...}
+    signingConfigs {
+        release {
+            storeFile file("myreleasekey.keystore")
+	    storePassword "password)
+	    keyAlias "MyReleaseKey"
+	    keyPassword "password"
+	    v2SigningEnabled false
+	}
+    }
+}
+```
+注意v2签名必须在zipalign之后，否则签名会失效。
+
+## 作用域目录访问（Scoped Directory Access）
+7.0开始，可以单独请求访问某个特定的外存目录。
+
+## 虚拟文件
+7.0在存储访问框架的基础上加上了虚拟文件的概念，让DocumentsProvider可以返回document URI，用于ACTION_VIEW的intent上，即使这个URI并没有直接的字节码表示。
+
+## 背景任务优化
+
+- 目标api为24及以上的，如果CONNECTIVITY_ACTION的广播接收器是注册在Manifest当中的话，将不会接收到这个广播。在代码中注册CONNECTIVITY_ACTION的在Context有效的情况下仍然可以收到。
+
+- 对于所有应用来说，系统都不会发送ACTION_NEW_PICTURE和ACTION_NEW_VIDEO广播了。
+
+## 文件系统权限修改
+
+
