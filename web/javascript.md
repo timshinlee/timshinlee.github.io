@@ -1,7 +1,7 @@
 字符串中使用反斜杠 \ 达到上下两行的字符串内容属于同一个字符串的作用，如果不用反斜杠则分行书写字符串会报错
 
 对象声明方式：
-```
+```javascript
 var obj = new Object;
 // 或者
 var obj = new Object();
@@ -21,7 +21,8 @@ var obj = {
 }
 ```
 以上方式是在函数中调用，另外一种方式是定义构造函数，构造函数的名称一般大写开头，以跟普通函数区分开来。
-```
+
+```javascript
 function Person(){
     this.name="Tim";
     this.age=14;
@@ -35,7 +36,7 @@ var person = new Person();
 构造函数创建对象的方式与一般的面向对象语言的类class不太一样。并不是所有的属性都会复制到新对象上，而是采用原型链的方式，在新对象和类当中去共用属性。
 
 采用普通函数的方式去创建一个person：
-```
+```javascript
 function createNewPerson(name) {
     var obj = {};
     obj.name = name;
@@ -50,7 +51,7 @@ john.name;
 john.greeting();
 ```
 采用构造函数的方式去创建一个person，构造函数就是JS中的类：
-```
+```javascript
 function Person(name) {
     this.name = name;
     this.greeting = function() {
@@ -66,7 +67,7 @@ bob.greeting();
 
 ### 创建对象的方式
 1. 直接创建对象
-```
+```javascript
 var person = {
     name: 'Bob',
     age: 32,
@@ -75,7 +76,7 @@ var person = {
 ```
 2. 构造函数
 3. 使用Object()构造函数
-```
+```javascript
 var person1 = new Object();
 person1.name = 'Chris';
 person1['age'] = 23;
@@ -90,7 +91,7 @@ var person2 = new Object({
 });
 ```
 4. 使用create()复制对象
-```
+```javascript
 var person3 = Object.create(person2);
 ```
 
@@ -114,25 +115,25 @@ JavaScript中Function也是一种对象。实际上 每个JavaScript函数都是
 注意：JavaScript中一个对象的原型是定义在__proto__属性当中的，而构造函数中prototype属性定义的是这个类中可以被子类继承的属性。
 
 而创建对象的Object.create()方法，实际上是以参数对象为原型去创建新对象，所以
-```
+```javascript
 var obj2 = Object.create(obj1);
 console.log(obj2.__proto__); // 输出的是obj1
 ```
 
 每个构造函数的prototype属性中都有一个constructor属性，这个constructor属性指向所属的构造函数。所以通过构造函数创建的类实例，都可以使用constructor属性去获取到原本的构造函数：
-```
+```javascript
 person1.constructor; // 返回Person()构造函数
 person2.constructor; // 返回Person()构造函数
 ```
 
 因为__proto__.constructor指向构造函数，所以可以在constructor后面加上括号作为函数进行调用，此时我们只需要再使用new关键字把这个函数作为构造函数调用即可：
-```
+```javascript
 var person3 = new person1.constructor('abby',14);
 ```
 这种方法可以用于没有办法调用到构造函数的时候。
 
 可以对构造函数的prototype属性进行修改：
-```
+```javascript
 Person.prototype.farewell = function(){
     alert('Farewell.');
 }
@@ -140,7 +141,7 @@ Person.prototype.farewell = function(){
 修改之后，对于已创建好的Person类实例，去调用farewell()是可行的。这也证明了JavaScript当中的继承并不是单纯从父类复制到子类。而是从子类到父类层层查询调用的属性。
 
 在构造函数的prototype属性中，应该定义一些子类通用的属性或者方法，而属性一般不通用，所以一般会定义一些方法：
-```
+```javascript
 // prototype的成员属性使用this时会返回undefined（因为this引用的是全局范围，而不是函数范围）
 Person.prototype.fullName = this.firstName + ' ' + this.lastName;
 
@@ -151,7 +152,7 @@ Person.prototype.fullName = function() {
 ```
 
 **继承已有对象**
-```
+```javascript
 function Teacher(name, age, gender, interests, subject) {
     // 继承原有属性
     Person.call(this, name, age, gender, interests, subject);
@@ -203,7 +204,7 @@ obj.propertyName或者obj["propertyName"]
 ### 函数
 #### 函数声明
 正常语法：
-```
+```javascript
 function functionName(parameters){
     
 }
@@ -212,7 +213,7 @@ function functionName(parameters){
 ---
 
 把匿名函数储存在变量当中
-```
+```javascript
 var x = function(a,b){return  a* b};
 ```
 这样变量可以当做函数来使用，传入参数
@@ -223,7 +224,7 @@ var z = x(1,2);
 ---
 
 通过函数构造器来定义匿名函数
-```
+```javascript
 var myFunction = new Function("a","b","return a * b");
 ```
 
@@ -250,7 +251,7 @@ var myFunction = new Function("a","b","return a * b");
 隐式参数的个数可以与显式参数不一致。分两种情况，一种是可以没有显式参数但是有多个隐式参数，这种情况下就没有参数名去引用传递进去的参数了，只能使用arguments对象去调用。第二种可以有显式参数，但是没有隐式参数，这时候参数名对应的值是undefined。
 
 要为某个参数设置默认值有个简便的方式：
-```
+```javascript
 y = y || 默认值;
 ```
 如果y是undefined就为false，就会等于默认值。
@@ -266,7 +267,7 @@ JavaScript函数有四种调用方式，区别在于this的初始化。this关�
 ---
 
 调用方式1：作为函数直接调用
-```
+```javascript
 function myFunction(a, b) {
     return a * b;
 }
@@ -278,7 +279,7 @@ myFunction(10, 2);
 ---
 调用方式2：作为对象方法调用
 
-```
+```javascript
 var myObject = {
     firstName:"John",
     lastName: "Doe",
@@ -293,7 +294,7 @@ myObject.fullName();         // 返回 "John Doe"
 ---
 调用方式3：使用构造函数调用函数
 
-```
+```javascript
 // 构造函数:
 function myFunction(arg1, arg2) {
     this.firstName = arg1;
@@ -311,7 +312,7 @@ x.firstName;                             // 返回 "John"
 调用方式4：作为函数方法调用函数
 
 在JavaScript当中函数是对象，有自己的属性和方法。方法中有call()和apply()两个方法用来调用函数，两个方法的第一个参数用来作为调用这个函数的对象，后面接着函数参数。两者区别在于call()逐个接收函数参数，而apply()是把参数放到数组里，使用数组去调用apply()。
-```
+```javascript
 function myFunction(a, b) {
     return a * b;
 }
@@ -328,7 +329,7 @@ JavaScript内嵌函数用来解决函数想要操作一个全局变量以便长�
 
 嵌套函数就是函数里面再定义函数，因为JavaScript当中所有函数都可以访问上一层的作用域，因此普通函数可以调用到全局变量，而嵌套函数可以访问到上层函数的变量。
 
-```
+```javascript
 function add() {
     var counter = 0;
     function plus() {counter += 1;}
@@ -341,7 +342,7 @@ function add() {
 
 闭包就是自调用函数本身定义需要的变量，然后返回另外一个函数，可以叫做子函数，子函数就可以调用到上层函数定义的值了。
 
-```
+```javascript
 var add = (function () {
     var counter = 0;
     return function () {return counter += 1;}
@@ -368,32 +369,32 @@ JavaScript中0和null和undefined为false，其他都是true。
 ### var、let和const
 **var**的作用域是整个函数，函数范围内可以重复使用var去声明同名变量。作用域的意思就是整个函数内该名称变量只有一个值。
 
-```
+```javascript
 function varTest(){
-	var x = 1;
-	if (true){
-		var x = 2;
-		console.log('x inside = ' + x);
-		// var x是函数级变量，此时x=2
-	}
-	console.log('x outside = ' + x)
+    var x = 1;
+    if (true){
+        var x = 2;
+	console.log('x inside = ' + x);
 	// var x是函数级变量，此时x=2
+    }
+    console.log('x outside = ' + x)
+    // var x是函数级变量，此时x=2
 }
 ```
 
 
 **let**是块级作用域的本地变量，子块的声明可以覆盖上级块的声明，例如：
 
-```
+```javascript
 function letTest(){
-	let y = 1
-	if (true){
-		let y = 2
-		// let y是块级变量，判断语句内的y会覆盖判断语句外的y，此时y=2
-		console.log('y inside = ' + y)
-	}
-	console.log('y outside = ' + y)
-	// 此处作用域超出了判断语句范围，因此y=1
+    let y = 1
+    if (true){
+        let y = 2
+	// let y是块级变量，判断语句内的y会覆盖判断语句外的y，此时y=2
+	console.log('y inside = ' + y)
+    }
+    console.log('y outside = ' + y)
+    // 此处作用域超出了判断语句范围，因此y=1
 }
 ```
 
@@ -404,14 +405,14 @@ function letTest(){
 
 ### 判断变量类型
 
-```
+```javascript
 var foo
 console.log(foo.constructor == Array)
 console.log(foo.constructor == String)
 ```
 
 ### 判断是否含有中文
-```
+```javascript
 if (escape(str).indexOf("%u") < 0) {
     // 不含中文
 }
@@ -421,7 +422,7 @@ void 0 等于undefined。
 其实void本身就等于undefined，不过有时候void会被赋值就不是undefined了，而void 0一直等于undefined。
 
 ### 转义字符
-```
+```javascript
 var bigmouth = 'I\' got no right to take my place.';
 ```
 \表示把后面的字符转义掉，不作为代码的关键字或者符号，而是作为普通文本。比如`\'`就是单纯的`'`，不是用来包含字符串的单引号，双引号同理。
@@ -443,22 +444,22 @@ JavaScript当中数字的类型都是number。数字字符串转数字使用Numb
 替换指定字符串生成新字符串，原字符串不变：strName.replace(targetSubStr, substitudeStr)
 
 按指定字符把字符串分割成数组：
-```
+```javascript
 var arr = strName.split(',');
 ```
 
 按指定字符把数组组合成字符串：
-```
+```javascript
 var str = arrName.join(',');
 ```
 
 直接使用逗号把数组组合成字符串：
-```
+```javascript
 var str = arrName.toString();
 ```
 
 ### Array
-```
+```javascript
 arrName.push(someItem); // 数组末尾添加元素
 var removedItem = arrName.pop(); // 数组末尾移除元素
 
@@ -470,7 +471,7 @@ var removedItem = arrName.shift(); // 数组开头移除元素
 person.age或者person['age']都可以
 
 但是person.只能调用已有的成员变量，person[]可以调用变量名，比如
-```
+```javascript
 var newDataName = 'data_key';
 var newDataValue = 'data_value';
 
@@ -480,7 +481,7 @@ person[newDataName] = newDataValue;
 
 ### XMLHttpRequest(XHR)
 XHR是JavaScript中一个用来进行网络请求的API
-```
+```javascript
 var requestURL = 'https://mdn.github.io/learning-area/javascript/oojs/json/superheroes.json';
 
 var request = new XMLHttpRequest();
@@ -498,7 +499,7 @@ request.onload = function() {
 ```
 
 ### DOM(Document Object Model)
-```
+```javascript
 navigator.xxxx
 window.innerWidth   window.innerHeight
 document.xxxx
