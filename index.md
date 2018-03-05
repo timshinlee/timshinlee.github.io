@@ -13,6 +13,8 @@
 [Resources](android/resources/index.md)
 
 [Android Studio](android/android_studio.md)
+
+[Permissions](android/permissions.md)
 ## Layout
 [ConstraintLayout](android/layout/constraintlayout.md)
 
