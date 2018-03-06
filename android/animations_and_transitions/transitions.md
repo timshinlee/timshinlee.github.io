@@ -141,6 +141,21 @@ transition框架自动对开始场景和结束场景的所有view进行动画，
         root.addView(textView); // 进行改变，系统会自动生成动画
 ```
 
+这种方式可以和ConstraintLayout进行配合，几行代码即可实现漂亮的动画：
+```java
+ConstraintSet constraintSet = new ConstraintSet();
+constraintSet.clone(this, R.layout.circuit);
+
+Transition transition = new ChangeBounds();
+transition.setInterpolator(new AnticipateOvershootInterpolator(1f));
+transition.setDuration(1000L);
+
+TransitionManager.beginDelayedTransition(constraintLayout, transition);
+constraintSet.applyTo(constraintLayout);
+```
+
+> [Build awesome animations with 7 lines of code using ConstraintLayout](https://android.jlelse.eu/build-awesome-animations-with-7-lines-of-code-using-constraintlayout-854e8fd3ad93)
+
 # 监听变换生命周期
 Activity可以实现TransitionListener接口的多个生命周期回调，来监听变换的状态。可以用于从开始场景传递参数到结束场景，因为结束场景的视图层级在变换结束才生成，无法在一开始就传过去，可以在变换开始时保存，然后在变换结束时传递过去。
 

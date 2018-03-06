@@ -20,6 +20,8 @@
 
 [Transitions](android/animations_and_transitions/transitions.md)
 
+[Custom Transitions](android/animations_and_transitions/custom_transitions.md)
+
 ## Layout
 [ConstraintLayout](android/layout/constraintlayout.md)
 
