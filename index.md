@@ -22,6 +22,8 @@
 
 [Custom Transitions](android/animations_and_transitions/custom_transitions.md)
 
+[Activity Transitions and Shared Elements](android/animations_and_transitions/activity_transitions_and_shared_elements.md)
+
 ## Layout
 [ConstraintLayout](android/layout/constraintlayout.md)
 
