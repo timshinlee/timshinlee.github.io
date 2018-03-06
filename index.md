@@ -15,6 +15,11 @@
 [Resources](android/resources/index.md)
 
 [Android Studio](android/android_studio.md)
+
+[Permissions](android/permissions.md)
+
+[Transitions](android/animations_and_transitions/transitions.md)
+
 ## Layout
 [ConstraintLayout](android/layout/constraintlayout.md)
 
