@@ -83,7 +83,7 @@ Android支持以下的shared elements变换：
 
 
         <item name="android:windowActivityTransitions">true</item>
-        <item name="android:fragmentSharedElementEnterTransition">@transition/image_transform</item>
+        <item name="android:windowSharedElementEnterTransition">@transition/image_transform</item>
         <item name="android:windowSharedElementExitTransition">@transition/image_transform</item>
     </style>
 ```
@@ -110,7 +110,7 @@ Android支持以下的shared elements变换：
         android:src="@mipmap/ic_launcher_round"/>
 ```
 
-3. 
+3.
 
 ```java
     final View icon = findViewById(R.id.icon);
@@ -122,4 +122,6 @@ Android支持以下的shared elements变换：
 	startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this, new Pair<>(icon, "launcher"), new Pair<>(icon2, "launcher2")).toBundle());
     }
 ```
+
+单独设置共享元素动画的时候，activity可能自动设置了淡入淡出动画，可以设置一个空的transitionSet作为activity切换动画来关闭淡入淡出动画
 

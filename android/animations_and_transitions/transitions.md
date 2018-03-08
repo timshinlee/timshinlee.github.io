@@ -72,7 +72,7 @@ Scene endScene = Scene.getSceneForLayout(sceneRoot, R.layout.another_scene, this
 
 ```java
 Scene scene = new Scene(sceneRoot); // 只指定了SceneRoot，未指定应用此场景时的变化方式，可以通过setEnterAction(Runnable)和setExitAction(Runnable)进行指定。
-Scene scene = new Scene(sceneRoot, layoutView); // API 21支持，进入该场景时，会先移除掉原本sceneRoot所自带的内部布局，使用layoutView作为sceneRoot的内部布局。
+Scene scene = new Scene(sceneRoot, layoutView); // API 19支持，进入该场景时，会先移除掉原本sceneRoot所自带的内部布局，使用layoutView作为sceneRoot的内部布局。
 ```
 # 应用变换
 ```java
@@ -118,10 +118,52 @@ Transition mFadeTransition = TransitionInflater.from(this)
         .inflateTransition(R.transition.fade_transition);
 ```
 
+在transitionSet中可以设置播放顺序和生效目标，如下：
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<transitionSet xmlns:android="http://schemas.android.com/apk/res/android"
+               android:transitionOrdering="sequential">
+    <changeBounds/>
+    <changeImageTransform/>
+    <fade>
+        <targets>
+            <target android:targetId="@id/image"/>
+        </targets>
+    </fade>
+</transitionSet>
+```
+
+另外可以使用transitionManager预先定义初始场景和结束场景，以及要使用的变换
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<transitionManager xmlns:android="http://schemas.android.com/apk/res/android">
+    <transition
+        android:fromScene="@layout/activity_main"
+        android:toScene="@layout/activity_detail"
+        android:transition="@transition/shared_element"/>
+    <transition
+        android:fromScene="@layout/activity_detail"
+        android:toScene="@layout/activity_main"
+        android:transition="@transition/shared_element"/>
+</transitionManager>
+```
+
+在代码中获取TransitionManager实例，然后调用transitionTo()方法，就可以进行场景切换了：
+
+```java
+    final TransitionManager transitionManager = TransitionInflater.from(this).inflateTransitionManager(R.transition.manager, sceneRoot);
+    transitionManager.transitionTo(scene2);
+```
+
 # 编辑变换目标列表
 transition框架自动对开始场景和结束场景的所有view进行动画，如果需要对场景中需要动画的view进行增加或删除，可以调用`removeTarget()`和`addTarget()`方法。
 
 # 不使用Scene进行变换
+
+以上需要先指定Scene对象，然而还有一种更简便的方法，通过调用方法通知系统，界面将发生改变，系统根据下一帧界面参数自动计算进行动画。
+
 以上使用Scene的方式是在改变view hierarchies的情况下进行动画，也可以在当前视图层级下对控件进行增删改，`ViewGroup.addView()`或者`ViewGroup.removeView()`。或者说前后两个视图层级基本一样的时候，就不需要创建两份布局文件，只要在代码中对当前视图层级进行修改就可以了，也就不需要Scene对象了，而是使用delayed transition。延时变化是从当前视图状态开始，记录下view的改变，然后在系统重绘的时候应用变换动画。
 
 具体步骤如下：
