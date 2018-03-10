@@ -41,6 +41,10 @@
 # RxJava
 [Introduction to functional reactive programming](rxjava/functional_reactive_programming.md)
 
+[Observable](rxjava/observables.md)
+
+[Operators] (rxjava/operators.md)
+
 # Kotlin
 [Basics](kotlin/basic.md)
 
