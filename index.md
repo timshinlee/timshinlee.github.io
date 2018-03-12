@@ -65,3 +65,5 @@
 [git](tools/git.md)
 
 [test](main.html)
+
+[Jenkins](tools/jenkins.md)
