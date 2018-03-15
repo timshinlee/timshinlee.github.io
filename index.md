@@ -24,6 +24,8 @@
 
 [Activity Transitions and Shared Elements](android/animations_and_transitions/activity_transitions_and_shared_elements.md)
 
+[TextView](android/widgets/textview.md)
+
 ## Layout
 [ConstraintLayout](android/layout/constraintlayout.md)
 
@@ -39,11 +41,12 @@
 [versions](android/general/versions.md)
 
 # RxJava
+
 [Introduction to functional reactive programming](rxjava/functional_reactive_programming.md)
 
 [Observable](rxjava/observables.md)
 
-[Operators] (rxjava/operators.md)
+[Operators](rxjava/operators.md)
 
 # Kotlin
 [Basics](kotlin/basic.md)
@@ -67,3 +70,7 @@
 [test](main.html)
 
 [Jenkins](tools/jenkins.md)
+
+# Notes
+
+[thoughts](thoughts.md)
