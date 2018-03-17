@@ -26,6 +26,8 @@
 
 [TextView](android/widgets/textview.md)
 
+[状态栏](android/status_bar.md)
+
 ## Layout
 [ConstraintLayout](android/layout/constraintlayout.md)
 
