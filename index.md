@@ -4,7 +4,7 @@
 
 # Android
 ---
-[Activity](android/ctivity.md)
+[Activity](android/activity.md)
 
 [Broadcast](android/broadcast.md)
 
