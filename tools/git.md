@@ -1,5 +1,6 @@
 ### tag
 
+```
 // setting user
 git config --global user.name "timshinlee"
 git config --global user.email "timshinlee@gmail.com"
@@ -12,6 +13,7 @@ git add .
 
 // commit changes
 git commit -m "initial commit"
+```
 
 creating tags: `git tag tag_name`
 ```
